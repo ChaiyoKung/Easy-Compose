@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./dbdata:/var/lib/mysql
+      - ./mvcmovie.sql:/docker-entrypoint-initdb.d/initdb.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=mvcmovie
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+
+  web:
+    build: .
+    restart: always
+    ports:
+      - 5000:80
+      - 3000:443
+    environment:
+      - "ConnectionStrings:Default=Server=db;User=root;Password=example;Database=mvcmovie"
+    depends_on:
+      - db

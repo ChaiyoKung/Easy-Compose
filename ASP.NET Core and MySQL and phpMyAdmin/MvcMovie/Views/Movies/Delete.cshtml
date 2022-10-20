@@ -1,0 +1,18 @@
+﻿@model MvcMovie.Models.Movie
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h4>Movie</h4>
+<hr />
+<p>
+    Do you want to delete <b>@Html.DisplayFor(model => model.Title)</b> ?
+</p>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+
+    <a asp-action="Index" class="btn btn-light me-3">No</a>
+    <input type="submit" value="Delete" class="btn btn-danger" />
+</form>
