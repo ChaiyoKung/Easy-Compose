@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./dbdata:/var/lib/mysql
+      - ./chaiyo.sql:/docker-entrypoint-initdb.d/initdb.sql # use this for initial database
+    environment:
+      - MARIADB_ROOT_PASSWORD=example
+      - MARIADB_DATABASE=chaiyo
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - db
