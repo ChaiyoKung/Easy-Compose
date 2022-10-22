@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:5.0
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./dbdata:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=T1uksaxFkVJvKfpsTF1T
+
+  db_seeder:
+    image: mongo:5.0
+    volumes:
+      - ./mongodb/dump:/dump
+    command: mongorestore --uri=mongodb://root:T1uksaxFkVJvKfpsTF1T@db:27017/?authSource=admin --db=example /dump/example
+    depends_on:
+      - db
+
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      - MONGODB_URI=mongodb://root:T1uksaxFkVJvKfpsTF1T@db:27017/example?authSource=admin
+    depends_on:
+      - db
+
+  web:
+    build: ./next-app
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:5000
+    depends_on:
+      - api
