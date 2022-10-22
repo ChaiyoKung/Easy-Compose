@@ -1,4 +1,7 @@
-# Docker Compose
+# Easy Compose
+Easy docker compose file
+
+---
 
 List of stack
 - [ASP.NET Core and MySQL and phpMyAdmin](https://github.com/ChaiyoKung/Docker-Compose/tree/main/ASP.NET%20Core%20and%20MySQL%20and%20phpMyAdmin)
