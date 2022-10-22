@@ -1,5 +1,5 @@
 # Easy Compose
-Easy docker compose file
+Easy docker compose file for dev stack
 
 ---
 
