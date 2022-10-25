@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./dbdata:/var/lib/mysql
+      - ./mysql/laravel.sql:/docker-entrypoint-initdb.d/initdb.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=laravel
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=mysql
+    depends_on:
+      - mysql
+
+  laravel:
+    build: ./laravel-app
+    restart: always
+    volumes:
+      - ./laravel-app:/app
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=root
+      - DB_PASSWORD=example
+
+  nginx:
+    image: nginx:1.23.2-alpine
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ./laravel-app:/app
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
